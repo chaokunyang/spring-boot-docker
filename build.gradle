@@ -35,15 +35,17 @@ dependencies {
 }
 
 docker {
-    hostUrl 'https://192.168.99.100:2376'
+    hostUrl 'https://192.168.99.100:2376' // set the URL used to contact the Docker server. Defaults to http://localhost:2375
     dockerBinary 'F:\\Development\\DevEnvironment\\Docker Toolbox\\docker.exe'
-    useApi false
+    useApi false // Use the Docker Remote API instead of a locally installed docker binary.
 }
-// 这里产生的镜像的标签会和 project。group一样，暂未找到解决办法
+// 这里产生的镜像的标签会和 project.group一样。通过在task里面直接指定tag可解决，注意指定的tag并不是完整的tag，该docker插件仍然会加上版本
 // tag = "${project.group}/${applicationName}:${tagVersion}"
 task buildDocker(type:Docker, dependsOn: build) {
     push = true
-    applicationName = jar.baseName
+    applicationName = jar.baseName // The name of the application being "dockerized".
+//    tagVersion // Optional version name added to the image tag name. Defaults to project.version or "latest" if project.version is unspecified.
+    tag = "chaokunyang/home-app" // docker插件仍然会加上版本
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
