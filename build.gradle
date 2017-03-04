@@ -50,7 +50,7 @@ task buildDocker(type:Docker, dependsOn: build) {
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
-            from jar
+            from jar // 表示复制构建生成的jar文件到build/docker目录下，如果构建生成的是war文件，那么这里则是 form war
             into stageDir
         }
     }
